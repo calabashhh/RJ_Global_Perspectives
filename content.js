@@ -1,4 +1,3 @@
-/* Edit chapter text, focus coordinates, and source references here. */
 window.PORTFOLIO_DATA = {
   "site": {
     "title": "Restorative Justice: Global Perspectives",
@@ -16,7 +15,7 @@ window.PORTFOLIO_DATA = {
       "region": "Chicago, United States",
       "lon": -87.6298,
       "lat": 41.8781,
-      "zoom": 3.7,
+      "zoom": 9.3,
       "bullets": [
         "Restorative practices (RP) and restorative justice methods (RJ) are taking place in schools, organizations, governmental institutions, and criminal justice systems all around the world. However, different countries and cultures define and use RJ differently.",
         "RP/RJ are rooted in human emotion. This is difficult to quantify. Yet, consistency of understanding of the definition and uses of RJ is needed for the most successful institutionalization, clarity of purposes, and depth of use.",
@@ -33,7 +32,7 @@ window.PORTFOLIO_DATA = {
       "region": "Costa Rica",
       "lon": -84.0907,
       "lat": 9.9281,
-      "zoom": 4.4,
+      "zoom": 10.2,
       "bullets": [
         "A liminal space: RJ exists somewhere between natural human responses and those organized by institutions (Maglione, et al., 2024).",
         "Institutionalization may compromise RJ’s core principles. Is it worth it to use RJ in your justice system, if it’s not practiced wholly and with fidelity? Yes, as the alternative can cause lasting damage.",
@@ -51,7 +50,7 @@ window.PORTFOLIO_DATA = {
       "region": "Brazil",
       "lon": -51.2302,
       "lat": -30.0346,
-      "zoom": 4.2,
+      "zoom": 9.7,
       "bullets": [
         "Language has power: renaming “inmates” or “prisoners” as “recuperandos (recovering people)” humanizes those who are incarcerated and labels them as hopeful (APAC 2020; Soulou, 2019).",
         "There is a lack of victim-offender mediation in this type of prison, which seems like a lost opportunity to deepen the RJ and offer more to the victims of crimes."
@@ -67,7 +66,7 @@ window.PORTFOLIO_DATA = {
       "region": "Netherlands",
       "lon": 4.9041,
       "lat": 52.3676,
-      "zoom": 4.5,
+      "zoom": 10.6,
       "bullets": [
         "One of the more unusual RJ methods is through the Building Bridges RJ program in a consortium of European countries (Brennan & Johnstone, 2019).",
         "New concept to me: both victims and offenders meet in respective groups with others of the opposite category. The objective for offenders is to attempt to understand and gain empathy for other victims; the objective for victims is to have an opportunity to share their stories. The success of this program may show that engaging in RJ is more powerful than engaging with the actual people involved in the crime."
@@ -83,7 +82,7 @@ window.PORTFOLIO_DATA = {
       "region": "Austria",
       "lon": 16.3738,
       "lat": 48.2082,
-      "zoom": 4.5,
+      "zoom": 10.5,
       "bullets": [
         "What is a crime? Who is a victim? These questions are answered differently across the world. The answers vary widely depending on culture, laws, religion, and philosophy of human rights. Particularly for women and girls, violations of their rights and bodies are viewed as acceptable or un-, depending on the location.",
         "Victims of gendered violence deserve to choose whether to have a part in RJ. RJ facilitators should be highly trained, and victims should be able to choose the gender of the facilitator, and not be forced to relive their trauma again and again."
@@ -99,7 +98,7 @@ window.PORTFOLIO_DATA = {
       "region": "Australia",
       "lon": 151.2093,
       "lat": -33.8688,
-      "zoom": 4.3,
+      "zoom": 9.3,
       "bullets": [
         "Traditional systems focus on the offender more than the victim. This should be flipped, with the victim’s needs centered, including the needs of the victim’s loved ones.",
         "Empower victims with the chance to tell their truths. It can be powerful and provide a sense of closure, even years after the crime took place."
@@ -115,7 +114,7 @@ window.PORTFOLIO_DATA = {
       "region": "South Africa",
       "lon": 18.4241,
       "lat": -33.9249,
-      "zoom": 4.3,
+      "zoom": 9.2,
       "bullets": [
         "Restorative processes for transitional justice - a society coming to terms with past wrongs and transitioning to a new government - differ greatly depending on the historical and cultural context. One of the greatest examples is in South Africa, when the Truth and Reconciliation Commission implemented RJ nationwide in response to the end of apartheid  (Llewellyn, 2007).",
         "Honesty is key: The idea is that telling full truths about past crimes leads to reconciliation between perpetrators, victims, and their communities. Like in other RJ contexts, the victims need to be centered in the processes, and the definition of victim expands to include family and community.",
@@ -132,7 +131,7 @@ window.PORTFOLIO_DATA = {
       "region": "Belgium",
       "lon": 4.7005,
       "lat": 50.8798,
-      "zoom": 4.5,
+      "zoom": 10.8,
       "bullets": [
         "For a whole community culture to buy into restorative practices takes effort and some sort of critical mass of faith in RP.",
         "Incorporation and cultural view of law enforcement/police and their powers affects the degree of restoration possible. If RJ is woven into law enforcement practices, the more likely a city could become a “Restorative city”.",
@@ -149,7 +148,7 @@ window.PORTFOLIO_DATA = {
       "region": "New Zealand",
       "lon": 175.0483,
       "lat": -39.9301,
-      "zoom": 4.8,
+      "zoom": 10.1,
       "bullets": [
         "Indigenous peoples worldwide have been using circle practices and other RP since time immemorial. In New Zealand, indigenous culture is more centered and acknowledged than in other parts of the world. In the restorative city of Whanganui, members of the police and government are already proponents of restorative practices, which helped lead to its successful implementation (Saywood, et al, 2023).",
         "Indigenous family approaches are used as RJ methods. This includes seeing each person as an individual and including their past traumas and experiences in restorative practices.",
@@ -166,7 +165,7 @@ window.PORTFOLIO_DATA = {
       "region": "England",
       "lon": -0.1276,
       "lat": 51.5072,
-      "zoom": 4.5,
+      "zoom": 10.8,
       "bullets": [
         "There is some inconclusive evidence on this topic; generally it seems that engaging in RJ does reduce the possibility that perpetrators of crimes will commit them again. However, many factors come into play when looking at these statistics, including the presence of the victim in RJ proceedings and the age of the offender (Piggott & Wood, 2019).",
         "Defining RJ comes up again in this context - most importantly: is the RJ being implemented in criminal contexts consistent with the understood definitions of RJ? How restorative are the practices being used; are they more in name than in method?"
@@ -182,7 +181,7 @@ window.PORTFOLIO_DATA = {
       "region": "Hong Kong",
       "lon": 114.1694,
       "lat": 22.3193,
-      "zoom": 4.5,
+      "zoom": 10.4,
       "bullets": [
         "RJ and RP services are generally more available and more established for children and teenagers than for adults (Suzuki & Wood, 2017). This was also a major finding in my research program analysis on RJ in Hong Kong.",
         "Implementation of RP/RJ programs within schools is shown to proactively support students and reduce bullying (Wong, 2005).",
@@ -200,7 +199,7 @@ window.PORTFOLIO_DATA = {
       "region": "Chicago, United States",
       "lon": -87.6298,
       "lat": 41.8781,
-      "zoom": 3.7,
+      "zoom": 9.3,
       "bullets": [
         "My greatest takeaway is a sense of hope because of what I’ve read, discussed, and learned about restorative justice across the globe. Particularly, this hope springs from the acknowledgement that RJ is important to people from greatly differing cultures and countries. Implementation of RJ is at varying levels of success in different countries; what even defines success of RJ varies. Regardless of variation, RJ continues to grow as a legitimate form of conflict resolution, reconciliation, social justice, and community building, and that’s worth hoping for."
       ],

@@ -34,6 +34,7 @@
     return `<section id="chapter-${number(c.index)}" class="chapter ${isConclusion?'conclusion':''} ${long?'long-chapter':''}" data-chapter="${c.index}" aria-labelledby="heading-${number(c.index)}">
       <div class="chapter-sticky">
         <div class="chapter-location" aria-hidden="true">${h(c.location)}<span class="location-coordinates">${h(c.anchor)} · ${formattedCoord}</span></div>
+        <div class="chapter-arrival" aria-hidden="true"><span class="arrival-eyebrow">GEOGRAPHIC FOCUS</span><span class="arrival-name">${h(c.anchor)}</span><span class="arrival-coordinates">${formattedCoord}</span></div>
         <div class="chapter-heading"><span class="chapter-count">${number(c.index)} / ${number(content.chapters.length)}</span><h2 id="heading-${number(c.index)}">${h(c.title)}</h2></div>
         ${qHtml}
         <article class="reflection-panel" aria-label="${isConclusion?'Conclusion':'Portfolio reflections'}"><span class="detail-kicker">${isConclusion?'CLOSING REFLECTION':'REFLECTIONS &amp; LEARNING'}</span>${reflectionHtml}</article>
@@ -72,17 +73,21 @@
     const nx=(c.lon+180)/360, ny=(90-c.lat)/180;
     const zoomTarget=isMobile()?Math.max(c.zoom,(height*2/width)*1.06):c.zoom;
     const zoom=mix(1,zoomTarget,focus);
-    // The source image is 2:1 equirectangular, full-world extent.
-    const tx=(.5-nx)*width*zoom*focus;
-    const ty=(.5-ny)*width*.5*zoom*focus;
-    // At zero focus the camera returns to the centered whole-world image.
+    // The source is equirectangular: x=(lon+180)/360, y=(90-lat)/180.
+    // Move the selected point toward the center THROUGHOUT the zoom.
+    // Interpolating the camera centre linearly while scaling made remote
+    // destinations fly *away* from the viewport before snapping back.
+    // At focus=0: original world view. At focus=1: point is exactly centred.
+    const travel=zoom-(1-focus);
+    const tx=(.5-nx)*width*travel;
+    const ty=(.5-ny)*width*.5*travel;
     camera.style.setProperty('--cam-x',`${tx}px`);
     camera.style.setProperty('--cam-y',`${ty}px`);
     camera.style.setProperty('--cam-zoom',zoom.toFixed(5));
     camera.style.setProperty('--pin-inverse',(1/zoom).toFixed(5));
     marker.style.left=`${(nx*100).toFixed(5)}%`;
     marker.style.top=`${(ny*100).toFixed(5)}%`;
-    marker.style.opacity=String(fade(.42,.84,focus)*.95);
+    marker.style.opacity=String(fade(.12,.34,focus)*.98);
   }
   function setWorld(){camera.style.setProperty('--cam-x','0px');camera.style.setProperty('--cam-y','0px');camera.style.setProperty('--cam-zoom','1');marker.style.opacity='0';}
   function styleChapter(el,p,c){
@@ -91,6 +96,10 @@
     const quote=fade(.23,.35,p)*(1-fade(.88,.96,p));
     const details=fade(.58,.71,p)*(1-fade(.88,.96,p));
     const collapse=fade(.49,.67,p);
+    // Keep the place name at the geographic target during the arrival phase,
+    // then clear the map for the full-screen quotation.
+    const arrival=fade(.11,.19,p)*(1-fade(.28,.35,p));
+    s.setProperty('--arrival-opacity',arrival.toFixed(3));
     s.setProperty('--heading-opacity',heading.toFixed(3));
     s.setProperty('--heading-offset',`${mix(20,0,fade(.08,.17,p)).toFixed(2)}px`);
     s.setProperty('--heading-vh',`${mix(12,5,fade(.51,.67,p)).toFixed(3)}vh`);
@@ -149,7 +158,7 @@
     const position=scrollPositions[idx];
     const p=clamp((scroll-position.start)/position.range);
     const chapter=content.chapters[idx];
-    const focus=prefersReducedMotion ? 0 : fade(.02,.20,p)*(1-fade(.87,.98,p));
+    const focus=prefersReducedMotion ? (p >= .18 && p <= .88 ? 1 : 0) : fade(.02,.23,p)*(1-fade(.86,.98,p));
     setCamera(chapter,focus);
     styleChapter(sections[idx],p,chapter);
     headerIndex.innerHTML=`${number(idx+1)} <span class="header-divider">/</span> ${number(content.chapters.length)} &nbsp; ${h(chapter.location.toUpperCase())}`;

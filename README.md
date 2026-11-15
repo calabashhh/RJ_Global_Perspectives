@@ -129,3 +129,33 @@ The supplied map is **5,346 × 2,673 pixels**, which is ample for whole-world to
 - Decide whether the representative city choices are appropriate for each country-level chapter.
 - Scroll through the website on desktop and mobile once after publishing.
 - Verify the owner account’s GitHub Pages URL loads the map image and that the menu links work.
+
+## Zoom positions and how to edit them
+
+The city and representative country focal points are **already programmed**. In
+`content.js`, each chapter contains its `lon` (longitude), `lat` (latitude), and
+`zoom` (magnification). The site maps them to the supplied equirectangular TIFF,
+converted to `assets/world-map.webp` for efficient web display. You do **not**
+need to locate the places by clicking on the image.
+
+This revision makes the location arrival more explicit and strengthens the
+zoom to approximately 9–11×, with the original world view returning between
+chapters. Zooming a 5,346-pixel-wide raster that far will visibly soften the
+map at some display sizes; more detailed city-level map imagery would require
+a higher-resolution source or secondary local map tiles.
+
+To change a focal point, edit the chapter's `lon`, `lat`, or `zoom` and re-upload
+`content.js`. No rebuild is required. Example: Chicago `lon: -87.6298`,
+`lat: 41.8781`. Country-wide chapters use representative cities noted in the
+chapter descriptions, not an invented country-centroid coordinate.
+
+### Updating an already published GitHub Pages site
+
+Replace the existing files in the repository root, retaining the `assets/`
+directory. After GitHub Pages finishes deploying the update, reload with
+**Ctrl+Shift+R** (or the browser's equivalent) to bypass a cached old version.
+The HTML also contains a version suffix on the updated CSS/JS file URLs.
+
+If the operating system requests *reduced motion*, the revised site still
+shows each destination but switches between the world and location views
+without continuous zoom animation.

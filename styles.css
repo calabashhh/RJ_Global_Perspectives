@@ -89,6 +89,25 @@ h1,h2 {font-family:'Aptos Display','Inter','Segoe UI',Helvetica,Arial,sans-serif
 .chapter.conclusion {height:270vh;min-height:1350px;}
 .chapter-sticky {position:sticky;top:0;height:100vh;min-height:560px;overflow:hidden;isolation:isolate;}
 .chapter-sticky:before {content:'';position:absolute;inset:0;background:rgba(19,41,41,.04);pointer-events:none;}
+
+/* The map reaches an unmistakable geographic destination before the quote
+   occupies the screen. These overlays are annotations, not geocoding. */
+.chapter-arrival {
+  position: absolute; z-index: 4; left:50%; top:calc(50% + 44px);
+  transform:translateX(-50%) translateY(calc((1 - var(--arrival-opacity, 0)) * 12px));
+  opacity:var(--arrival-opacity, 0);
+  pointer-events:none; text-align:center; width:max-content; max-width:82vw;
+  padding:14px 24px 13px; color:#2d493d;
+  background:rgba(250,246,235,.93); border:1px solid rgba(100,116,96,.3);
+  border-top:3px solid var(--terracotta);
+  box-shadow:0 12px 30px rgba(22,43,40,.20);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+}
+.chapter-arrival span {display:block;}
+.arrival-eyebrow {font-size:9px;font-weight:800;letter-spacing:.19em;color:#a46a51;margin-bottom:8px;}
+.arrival-name {font-size:clamp(17px,2vw,24px);font-weight:800;letter-spacing:-.02em;}
+.arrival-coordinates {font-size:10px;font-weight:600;color:#698176;margin-top:6px;letter-spacing:.03em;}
+
 .chapter-location {position:absolute;top:calc(var(--header-h) + 30px);left:var(--location-left, 76%);transform:translateX(-50%);max-width:50vw;z-index:5;text-align:center;white-space:nowrap;color:#375346;background:rgba(249,244,229,.88);box-shadow:0 5px 25px rgba(43,51,37,.08);padding:12px 19px;border:1px solid rgba(51,72,52,.16);text-transform:uppercase;letter-spacing:.17em;font-weight:800;font-size:clamp(11px,.9vw,14px);opacity:var(--location-opacity,0);}
 .location-coordinates {display:block;font-weight:500;font-size:9px;letter-spacing:.12em;color:#798478;margin-top:5px;text-transform:none;}
 .chapter-heading {position:absolute;top:calc(var(--header-h) + var(--heading-vh, 12vh));left:50%;width:min(78vw,1120px);transform:translate(-50%, var(--heading-offset,12px));text-align:center;opacity:var(--heading-opacity,0);z-index:4;}
@@ -167,6 +186,9 @@ h1,h2 {font-family:'Aptos Display','Inter','Segoe UI',Helvetica,Arial,sans-serif
   .chapter{height:410vh;min-height:2100px;}
   .chapter.long-chapter{height:470vh;}
   .chapter.conclusion{height:275vh;min-height:1400px;}
+  .chapter-arrival {top:calc(50% + 42px);padding:12px 16px 11px;max-width:89vw;}
+  .arrival-name {font-size:16px;}
+  .arrival-coordinates {font-size:9px;}
   .chapter-location{top:calc(var(--header-h) + 16px);font-size:10px;padding:10px 13px;max-width:85vw;left:var(--location-left-mobile, 50%);letter-spacing:.14em;}
   .location-coordinates{font-size:8px;}
   .chapter-heading{top:calc(var(--header-h) + 10vh);width:92vw;}
@@ -205,5 +227,6 @@ h1,h2 {font-family:'Aptos Display','Inter','Segoe UI',Helvetica,Arial,sans-serif
  html{scroll-behavior:auto;}
  .scroll-mouse:after{animation:none;}
  .map-camera{will-change:auto;}
+ .chapter-arrival{transition:none!important;}
  *{scroll-behavior:auto!important;}
 }
