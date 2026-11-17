@@ -23,7 +23,11 @@
   const camera = $('#map-camera');
   const progressBar = $('#header-progress');
   const headerIndex = $('#header-index');
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The map is explicitly a scroll-controlled storytelling element: even when
+  // OS/browser reduced-motion is enabled, NEVER switch between just 1x and 10x.
+  // Those hard jumps were a source of the abrupt zoom behavior in v5.
+  // Users sensitive to camera movement can opt for a fixed map with ?staticMap=1.
+  const staticMap = new URLSearchParams(window.location.search).get('staticMap') === '1';
 
   const renderChapter = (c) => {
     const isConclusion = !c.quote;
@@ -66,30 +70,72 @@
     scrollPositions=sections.map(s=>({start:s.offsetTop,end:s.offsetTop+s.offsetHeight,range:Math.max(1,s.offsetHeight-height)}));
     schedule();
   };
+  // The camera always has a continuously varying, reversible scroll target.
+  // CSS transitions must NOT chase each wheel event: that made the camera lag
+  // and then seem to snap into place when scrolling stopped.
+  const cameraCurrent = {x:0,y:0,logZoom:0};
+  const cameraTarget = {x:0,y:0,logZoom:0};
+  let cameraFrameRequested=false;
+  let cameraFrameTime=0;
+  const debugZoom = new URLSearchParams(window.location.search).has('debugZoom');
+  const debugElement = debugZoom ? document.createElement('output') : null;
+  if (debugElement) {
+    debugElement.className='camera-debug';
+    debugElement.setAttribute('aria-label','Map animation diagnostics');
+    document.body.appendChild(debugElement);
+  }
+  function drawCamera() {
+    const z=Math.exp(cameraCurrent.logZoom);
+    camera.style.setProperty('--cam-x',`${cameraCurrent.x.toFixed(3)}px`);
+    camera.style.setProperty('--cam-y',`${cameraCurrent.y.toFixed(3)}px`);
+    camera.style.setProperty('--cam-zoom',z.toFixed(6));
+    camera.style.setProperty('--pin-inverse',(1/z).toFixed(6));
+    if(debugElement)debugElement.textContent=`Map zoom ${z.toFixed(2)}×`;
+  }
+  function animateCamera(time) {
+    cameraFrameRequested=false;
+    const dt=cameraFrameTime?Math.min((time-cameraFrameTime)/1000,.06):.016;
+    cameraFrameTime=time;
+    // Ease actual wheel/touchpad increments without relying on CSS transitions.
+    // An exponential decay has frame-rate-independent response (~130ms).
+    const blend=1-Math.exp(-dt*17);
+    for(const k of ['x','y','logZoom']) {
+      const next=cameraCurrent[k]+(cameraTarget[k]-cameraCurrent[k])*blend;
+      cameraCurrent[k]=Math.abs(cameraTarget[k]-next)<(k==='logZoom'?.00003:.04)?cameraTarget[k]:next;
+    }
+    drawCamera();
+    const remaining=Math.max(
+      Math.abs(cameraTarget.x-cameraCurrent.x),
+      Math.abs(cameraTarget.y-cameraCurrent.y),
+      Math.abs(cameraTarget.logZoom-cameraCurrent.logZoom)*1000
+    );
+    if(remaining>.01){cameraFrameRequested=true;requestAnimationFrame(animateCamera)}
+    else cameraFrameTime=0;
+  }
+  function setCameraTarget(x,y,z) {
+    cameraTarget.x=x;
+    cameraTarget.y=y;
+    cameraTarget.logZoom=Math.log(z);
+    if(!cameraFrameRequested){cameraFrameRequested=true;requestAnimationFrame(animateCamera)}
+  }
   function setCamera(c,focus) {
+    if(staticMap){setWorld();return;}
     const nx=(c.lon+180)/360, ny=(90-c.lat)/180;
     const zoomTarget=isMobile()?Math.max(c.zoom,(height*2/width)*1.06):c.zoom;
-    // Exponential interpolation gives an even perceived rate of zoom rather
-    // than a fast early enlargement and a small-looking change at the end.
-    // `focus` itself changes slowly over an extended scroll interval.
+    // Equal distances through log zoom = equal perceived zoom speed.
     const zoom=Math.exp(Math.log(zoomTarget)*focus);
-    // The source is equirectangular: x=(lon+180)/360, y=(90-lat)/180.
-    // Move the selected point toward the center THROUGHOUT the zoom.
-    // Interpolating the camera centre linearly while scaling made remote
-    // destinations fly *away* from the viewport before snapping back.
-    // At focus=0: original world view. At focus=1: point is exactly centred.
+    // The equirectangular source covers 360×180 degrees. When focus==1 the
+    // actual geographic point must sit at the center of the viewport.
+    // When focus==0 the entire world must have its original center/scale.
     const travel=zoom-(1-focus);
     const tx=(.5-nx)*width*travel;
     const ty=(.5-ny)*width*.5*travel;
-    camera.style.setProperty('--cam-x',`${tx}px`);
-    camera.style.setProperty('--cam-y',`${ty}px`);
-    camera.style.setProperty('--cam-zoom',zoom.toFixed(5));
-    camera.style.setProperty('--pin-inverse',(1/zoom).toFixed(5));
+    setCameraTarget(tx,ty,zoom);
     marker.style.left=`${(nx*100).toFixed(5)}%`;
     marker.style.top=`${(ny*100).toFixed(5)}%`;
     marker.style.opacity=String(fade(.12,.34,focus)*.98);
   }
-  function setWorld(){camera.style.setProperty('--cam-x','0px');camera.style.setProperty('--cam-y','0px');camera.style.setProperty('--cam-zoom','1');marker.style.opacity='0';}
+  function setWorld(){setCameraTarget(0,0,1);marker.style.opacity='0';}
   function styleChapter(el,p,c){
     const s=el.style;
     const heading=fade(.12,.23,p)*(1-fade(.89,.98,p));
@@ -156,7 +202,10 @@
     // Scroll-position-based, reversible camera movement. Zoom in over roughly
     // 1.1–1.5 viewport heights; zoom back out over another viewport or more.
     // No autoplay, jumps, or setTimeout animation during chapter transitions.
-    const focus=prefersReducedMotion ? (p >= .31 && p <= .73 ? 1 : 0) : fade(.01,.31,p)*(1-fade(.73,.99,p));
+    // Travel in as the first ~third of a chapter scrolls, hold the camera
+    // steady through the quotation/reflections, then return to the world.
+    // This is smooth at ALL operating-system motion settings; no 0/1 snap.
+    const focus=fade(.01,.35,p)*(1-fade(.72,.98,p));
     setCamera(chapter,focus);
     styleChapter(sections[idx],p,chapter);
     headerIndex.innerHTML=`${number(idx+1)} <span class="header-divider">/</span> ${number(content.chapters.length)} &nbsp; ${h(chapter.location.toUpperCase())}`;

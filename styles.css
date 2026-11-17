@@ -24,7 +24,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--terracotta); ou
 .skip-link { position: fixed; top: -200px; left: 16px; z-index: 900; background: var(--cream); padding: 14px 18px; border-radius: 8px; }
 .skip-link:focus { top: 14px; }
 .map-stage { position: fixed; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 50%,#a7c8d5 0%,#7faab9 100%); z-index: 0; pointer-events: none; }
-.map-camera { position: absolute; left: 50%; top: 50%; width: 100%; aspect-ratio: 2/1; transform-origin: 50% 50%; transform: translate3d(calc(-50% + var(--cam-x, 0px)), calc(-50% + var(--cam-y, 0px)), 0) scale(var(--cam-zoom, 1)); will-change: transform; transition:transform 210ms ease-out; }
+.map-camera { position: absolute; left: 50%; top: 50%; width: 100%; aspect-ratio: 2/1; transform-origin: 50% 50%; transform: translate3d(calc(-50% + var(--cam-x, 0px)), calc(-50% + var(--cam-y, 0px)), 0) scale(var(--cam-zoom, 1)); will-change: transform; /* JS frame interpolation owns the camera: no transition here. */ }
 .map-image { display:block; width:100%; height:100%; object-fit:contain; position:relative; z-index:1; }
 /* True dateline continuation using cropped imagery from the same Natural Earth map.
    The west edge of the map continues east of New Zealand, and vice versa. */
@@ -195,3 +195,6 @@ h1,h2 {font-family:'Aptos Display','Inter','Segoe UI',Helvetica,Arial,sans-serif
  .map-camera{will-change:auto;transition:none;}
  *{scroll-behavior:auto!important;}
 }
+
+/* Optional developer check: add ?debugZoom=1 to the page URL. */
+.camera-debug{position:fixed;right:14px;bottom:14px;z-index:998;background:#213d35;color:white;font:700 12px/1.4 system-ui,sans-serif;padding:10px 13px;border-radius:3px;box-shadow:0 6px 18px #1b2d2a4d;pointer-events:none;}
