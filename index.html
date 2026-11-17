@@ -7,15 +7,20 @@
   <meta name="description" content="Restorative Justice: Global Perspectives — a geographic learning portfolio by Margaret Broz, November 2026.">
   <title>Restorative Justice: Global Perspectives — Margaret Broz</title>
   <link rel="preload" href="assets/world-map-preview.webp" as="image" type="image/webp">
-  <link rel="stylesheet" href="styles.css?v=4">
-  <script src="content.js?v=4" defer></script>
-  <script src="script.js?v=4" defer></script>
+  <link rel="stylesheet" href="styles.css?v=5">
+  <script src="content.js?v=5" defer></script>
+  <script src="script.js?v=5" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#journey-start">Skip to the learning portfolio</a>
   <div class="map-stage" aria-hidden="true">
     <div class="map-camera" id="map-camera">
+      <!-- Adjacent strips are copied from the opposite edges of the SAME world map.
+           At the international date line, longitude +180 continues as -180.
+           This prevents blank blue screen areas around New Zealand/Pacific zooms. -->
+      <img src="assets/map-wrap-east.webp" alt="" class="map-wrap map-wrap-left" width="1000" height="2673" decoding="async">
       <img src="assets/world-map.webp" alt="" class="map-image" width="5346" height="2673" fetchpriority="high">
+      <img src="assets/map-wrap-west.webp" alt="" class="map-wrap map-wrap-right" width="1000" height="2673" decoding="async">
       <div class="map-pin" id="map-pin"><span class="map-pin-core"></span></div>
     </div>
     <div class="map-veil"></div>

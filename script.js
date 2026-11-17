@@ -33,10 +33,9 @@
     return `<section id="chapter-${number(c.index)}" class="chapter ${isConclusion?'conclusion':''} ${long?'long-chapter':''}" data-chapter="${c.index}" aria-labelledby="heading-${number(c.index)}">
       <div class="chapter-sticky">
         <div class="chapter-location" aria-hidden="true">${h(c.location)}</div>
-        <div class="chapter-heading"><span class="chapter-count">${number(c.index)} / ${number(content.chapters.length)}</span><h2 id="heading-${number(c.index)}">${h(c.title)}</h2></div>
+        <div class="chapter-heading"><h2 id="heading-${number(c.index)}">${h(c.title)}</h2></div>
         ${qHtml}
         <article class="reflection-panel" aria-label="${isConclusion?'Conclusion':'Portfolio reflections'}"><span class="detail-kicker">${isConclusion?'CLOSING REFLECTION':'REFLECTIONS &amp; LEARNING'}</span>${reflectionHtml}</article>
-        <div class="chapter-grounding" aria-hidden="true"><span class="grounding-line"></span>${h(c.region.toUpperCase())}</div>
       </div>
     </section>`;
   };
@@ -70,7 +69,10 @@
   function setCamera(c,focus) {
     const nx=(c.lon+180)/360, ny=(90-c.lat)/180;
     const zoomTarget=isMobile()?Math.max(c.zoom,(height*2/width)*1.06):c.zoom;
-    const zoom=mix(1,zoomTarget,focus);
+    // Exponential interpolation gives an even perceived rate of zoom rather
+    // than a fast early enlargement and a small-looking change at the end.
+    // `focus` itself changes slowly over an extended scroll interval.
+    const zoom=Math.exp(Math.log(zoomTarget)*focus);
     // The source is equirectangular: x=(lon+180)/360, y=(90-lat)/180.
     // Move the selected point toward the center THROUGHOUT the zoom.
     // Interpolating the camera centre linearly while scaling made remote
@@ -90,20 +92,19 @@
   function setWorld(){camera.style.setProperty('--cam-x','0px');camera.style.setProperty('--cam-y','0px');camera.style.setProperty('--cam-zoom','1');marker.style.opacity='0';}
   function styleChapter(el,p,c){
     const s=el.style;
-    const heading=fade(.07,.17,p)*(1-fade(.87,.96,p));
-    const quote=fade(.23,.35,p)*(1-fade(.88,.96,p));
-    const details=fade(.58,.71,p)*(1-fade(.88,.96,p));
-    const collapse=fade(.49,.67,p);
+    const heading=fade(.12,.23,p)*(1-fade(.89,.98,p));
+    const quote=fade(.30,.40,p)*(1-fade(.88,.97,p));
+    const details=fade(.56,.68,p)*(1-fade(.88,.97,p));
+    const collapse=fade(.49,.64,p);
     s.setProperty('--heading-opacity',heading.toFixed(3));
-    s.setProperty('--heading-offset',`${mix(20,0,fade(.08,.17,p)).toFixed(2)}px`);
+    s.setProperty('--heading-offset',`${mix(20,0,fade(.12,.23,p)).toFixed(2)}px`);
     s.setProperty('--heading-vh',`${mix(12,5,fade(.51,.67,p)).toFixed(3)}vh`);
     s.setProperty('--quote-opacity',quote.toFixed(3));
     s.setProperty('--detail-opacity',details.toFixed(3));
     s.setProperty('--detail-shift',`${mix(25,0,fade(.60,.72,p)).toFixed(2)}px`);
-    s.setProperty('--location-opacity',(fade(.10,.20,p)*(1-fade(.91,.98,p))).toFixed(3));
+    s.setProperty('--location-opacity',(fade(.12,.24,p)*(1-fade(.92,.99,p))).toFixed(3));
     s.setProperty('--location-left',`${mix(78,16,collapse).toFixed(3)}%`);
     s.setProperty('--location-left-mobile',`${mix(50,50,collapse).toFixed(3)}%`);
-    s.setProperty('--grounding-opacity',(fade(.18,.30,p)*(1-fade(.9,.98,p))).toFixed(3));
     const wideQuote = c.quote && c.quote.length > 290 ? .88 : c.quote && c.quote.length>240 ? .94 : 1;
     const fontLarge=Math.min(38,Math.max(23,width*.025))*wideQuote;
     const fontSmall=Math.min(25,Math.max(16,width*.014))*wideQuote;
@@ -152,7 +153,10 @@
     const position=scrollPositions[idx];
     const p=clamp((scroll-position.start)/position.range);
     const chapter=content.chapters[idx];
-    const focus=prefersReducedMotion ? (p >= .18 && p <= .88 ? 1 : 0) : fade(.02,.23,p)*(1-fade(.86,.98,p));
+    // Scroll-position-based, reversible camera movement. Zoom in over roughly
+    // 1.1–1.5 viewport heights; zoom back out over another viewport or more.
+    // No autoplay, jumps, or setTimeout animation during chapter transitions.
+    const focus=prefersReducedMotion ? (p >= .31 && p <= .73 ? 1 : 0) : fade(.01,.31,p)*(1-fade(.73,.99,p));
     setCamera(chapter,focus);
     styleChapter(sections[idx],p,chapter);
     headerIndex.innerHTML=`${number(idx+1)} <span class="header-divider">/</span> ${number(content.chapters.length)} &nbsp; ${h(chapter.location.toUpperCase())}`;

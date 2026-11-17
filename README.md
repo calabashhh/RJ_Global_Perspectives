@@ -139,7 +139,7 @@ converted to `assets/world-map.webp` for efficient web display. You do **not**
 need to locate the places by clicking on the image.
 
 The previous revision strengthened the zoom to approximately 9–11×,
-with the original world view returning between chapters. Version 4 removes
+with the original world view returning between chapters. Version 5 removes
 the centered geographic-arrival text panel while preserving the zoom and marker. Zooming a 5,346-pixel-wide raster that far will visibly soften the
 map at some display sizes; more detailed city-level map imagery would require
 a higher-resolution source or secondary local map tiles.
@@ -160,7 +160,7 @@ If the operating system requests *reduced motion*, the revised site still
 shows each destination but switches between the world and location views
 without continuous zoom animation.
 
-## Version 4 — presentation simplifications (17 November 2026)
+## Version 5 — presentation simplifications (17 November 2026)
 
 - The intro retains the title and author but removes the “A learning portfolio” kicker and the explanatory sentence.
 - The separate mid-screen geographic-arrival text panel has been removed. The map still zooms to the programmed destination and retains its small map point marker.
@@ -169,3 +169,12 @@ without continuous zoom animation.
 - The references heading displays “References” without its former kicker or explanatory line; bibliography and acknowledgments are unchanged.
 
 **Updating an existing GitHub Pages site:** replace all seven files, including the files in `assets/`, with this ZIP's contents in the repository root. Script and stylesheet cache keys are updated to `v=4`.
+
+
+## Version 5 presentation refinements (November 2026)
+
+- The chapter-number badges above chapter titles have been removed. The chapter menu and the small header progress readout remain available for navigation.
+- Bottom-left geographic captions have been removed. The chapter's moving location-name card remains.
+- The map's original 5,346 × 2,673 pixels are preserved. Two additional ocean-edge image strips, `assets/map-wrap-east.webp` and `assets/map-wrap-west.webp`, are **cropped from the provided Natural Earth world map itself**, not synthesized imagery. They wrap the map correctly at longitude ±180°, so the New Zealand chapter no longer reveals a flat blue region east of the map boundary.
+- Geographic zoom is now exponential (visually smoother) and scroll-controlled over an extended entrance and exit distance. Scroll slowly or use the chapter menu to see the full transition. Reversing scroll reverses the motion.
+- For testing this version, upload **all** files and refresh with Ctrl+Shift+R so updated script and style caches clear.
