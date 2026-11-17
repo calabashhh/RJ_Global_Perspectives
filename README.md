@@ -65,7 +65,7 @@ Open **content.js**. Each chapter has editable fields:
   "region": "Belgium",
   "lon": 4.7005,
   "lat": 50.8798,
-  "zoom": 4.5,
+  "zoom": 10.0,
   "quote": "...",
   "attribution": "...",
   "bullets": ["...", "..."]
@@ -74,9 +74,9 @@ Open **content.js**. Each chapter has editable fields:
 
 - `location`: uppercase name shown in the viewport
 - `title`: centered chapter title
-- `anchor`: the representative geographic anchor used on the map
+- `anchor`: the representative geographic focus used to choose the map coordinates; it is not displayed in the place-name label
 - `lon` and `lat`: geographic longitude and latitude, in decimal degrees
-- `zoom`: maximum magnification for that chapter. Smaller values show more surrounding geography. An approximate range of **3–5** is recommended with this particular image; excessive values can look soft.
+- `zoom`: maximum magnification for that chapter. Smaller values show more surrounding geography. The current chapters mostly use **9–11×** to create the pronounced destination zoom; the image can look soft at this scale, so lower the value if you prefer a wider, sharper regional view.
 - `quote` and `attribution`: large quote panel. The final conclusion deliberately has `quote: null`.
 - `bullets`: points in the commentary panel. The conclusion instead shows the paragraph without bullets.
 
@@ -138,9 +138,9 @@ The city and representative country focal points are **already programmed**. In
 converted to `assets/world-map.webp` for efficient web display. You do **not**
 need to locate the places by clicking on the image.
 
-This revision makes the location arrival more explicit and strengthens the
-zoom to approximately 9–11×, with the original world view returning between
-chapters. Zooming a 5,346-pixel-wide raster that far will visibly soften the
+The previous revision strengthened the zoom to approximately 9–11×,
+with the original world view returning between chapters. Version 4 removes
+the centered geographic-arrival text panel while preserving the zoom and marker. Zooming a 5,346-pixel-wide raster that far will visibly soften the
 map at some display sizes; more detailed city-level map imagery would require
 a higher-resolution source or secondary local map tiles.
 
@@ -159,3 +159,13 @@ The HTML also contains a version suffix on the updated CSS/JS file URLs.
 If the operating system requests *reduced motion*, the revised site still
 shows each destination but switches between the world and location views
 without continuous zoom animation.
+
+## Version 4 — presentation simplifications (17 November 2026)
+
+- The intro retains the title and author but removes the “A learning portfolio” kicker and the explanatory sentence.
+- The separate mid-screen geographic-arrival text panel has been removed. The map still zooms to the programmed destination and retains its small map point marker.
+- The location label that moves from upper-right toward upper-left contains **only** the chapter's place name, without anchor city or coordinates. Coordinates remain in `content.js` solely for map positioning.
+- Quote panels no longer show “A Voice from the Reading”; the speaker attribution is italicized.
+- The references heading displays “References” without its former kicker or explanatory line; bibliography and acknowledgments are unchanged.
+
+**Updating an existing GitHub Pages site:** replace all seven files, including the files in `assets/`, with this ZIP's contents in the repository root. Script and stylesheet cache keys are updated to `v=4`.

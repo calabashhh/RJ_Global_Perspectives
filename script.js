@@ -28,13 +28,11 @@
   const renderChapter = (c) => {
     const isConclusion = !c.quote;
     const long = c.bullets.join(' ').length > 700;
-    const qHtml = isConclusion ? '' : `<aside class="quote-panel" aria-label="Quotation"><div class="quote-label">A VOICE FROM THE READING</div><blockquote>“${h(c.quote)}”</blockquote><cite class="quote-attribution">— ${h(c.attribution)}</cite></aside>`;
+    const qHtml = isConclusion ? '' : `<aside class="quote-panel" aria-label="Quotation"><blockquote>“${h(c.quote)}”</blockquote><cite class="quote-attribution">— ${h(c.attribution)}</cite></aside>`;
     const reflectionHtml = isConclusion ? `<p class="conclusion-text">${h(c.bullets.join(' '))}</p>` : `<ul>${c.bullets.map(text=>`<li>${h(text)}</li>`).join('')}</ul>`;
-    const formattedCoord = `${Math.abs(c.lat).toFixed(1)}°${c.lat>=0?'N':'S'} · ${Math.abs(c.lon).toFixed(1)}°${c.lon>=0?'E':'W'}`;
     return `<section id="chapter-${number(c.index)}" class="chapter ${isConclusion?'conclusion':''} ${long?'long-chapter':''}" data-chapter="${c.index}" aria-labelledby="heading-${number(c.index)}">
       <div class="chapter-sticky">
-        <div class="chapter-location" aria-hidden="true">${h(c.location)}<span class="location-coordinates">${h(c.anchor)} · ${formattedCoord}</span></div>
-        <div class="chapter-arrival" aria-hidden="true"><span class="arrival-eyebrow">GEOGRAPHIC FOCUS</span><span class="arrival-name">${h(c.anchor)}</span><span class="arrival-coordinates">${formattedCoord}</span></div>
+        <div class="chapter-location" aria-hidden="true">${h(c.location)}</div>
         <div class="chapter-heading"><span class="chapter-count">${number(c.index)} / ${number(content.chapters.length)}</span><h2 id="heading-${number(c.index)}">${h(c.title)}</h2></div>
         ${qHtml}
         <article class="reflection-panel" aria-label="${isConclusion?'Conclusion':'Portfolio reflections'}"><span class="detail-kicker">${isConclusion?'CLOSING REFLECTION':'REFLECTIONS &amp; LEARNING'}</span>${reflectionHtml}</article>
@@ -96,10 +94,6 @@
     const quote=fade(.23,.35,p)*(1-fade(.88,.96,p));
     const details=fade(.58,.71,p)*(1-fade(.88,.96,p));
     const collapse=fade(.49,.67,p);
-    // Keep the place name at the geographic target during the arrival phase,
-    // then clear the map for the full-screen quotation.
-    const arrival=fade(.11,.19,p)*(1-fade(.28,.35,p));
-    s.setProperty('--arrival-opacity',arrival.toFixed(3));
     s.setProperty('--heading-opacity',heading.toFixed(3));
     s.setProperty('--heading-offset',`${mix(20,0,fade(.08,.17,p)).toFixed(2)}px`);
     s.setProperty('--heading-vh',`${mix(12,5,fade(.51,.67,p)).toFixed(3)}vh`);
